@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity {private EditText searchEdit
         fragmentContainer = findViewById(R.id.fragment_container);
         spinner = findViewById(R.id.spinner);
 
-        // Skapa en array adapter för dropdown menyn
+
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.weather_options, android.R.layout.simple_spinner_item);
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {private EditText searchEdit
                 if (!city.isEmpty()) {
                     Fragment fragment = null;
                     String selectedOption = spinner.getSelectedItem().toString();
-                    if (selectedOption.equals("Today's Weather")) {
+                    if (selectedOption.equals("Today Weather")) {
                         fragment = new TodayWeatherFragment();
                     } else if (selectedOption.equals("Hourly Forecast")) {
                         fragment = new HourlyForecastFragment();
@@ -53,13 +53,13 @@ public class MainActivity extends AppCompatActivity {private EditText searchEdit
                         fragment = new WeeklyForecastFragment();
                     }
                     if (fragment != null) {
-                        // Lägg till den valda fragmentet i framen
+
                         FragmentManager fragmentManager = getSupportFragmentManager();
                         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                         fragmentTransaction.replace(R.id.fragment_container, fragment);
                         fragmentTransaction.commit();
 
-                        // Gör sökrutan och dropdown-menyn osynlig
+
                         searchEditText.setVisibility(View.GONE);
                         spinner.setVisibility(View.GONE);
                         searchButton.setVisibility(View.GONE);

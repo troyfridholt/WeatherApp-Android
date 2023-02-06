@@ -62,7 +62,7 @@ public class WeeklyForecastFragment extends Fragment {
 
                                 JSONObject main = jsonObject.getJSONObject("main");
                                 Double temperature = main.getDouble("temp");
-                                //Convert temperature from kelvin to celsius
+
                                 temperature = temperature - 273.15;
                                 Double humidity = main.getDouble("humidity");
 
