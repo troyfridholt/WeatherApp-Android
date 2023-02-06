@@ -26,14 +26,14 @@ public class TodayWeatherFragment extends Fragment {
     private TextView pressureTextView;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_today_weather, container, false);
 
         temperatureTextView = rootView.findViewById(R.id.temperatureTextView);
         humidityTextView = rootView.findViewById(R.id.humidityTextView);
         windSpeedTextView = rootView.findViewById(R.id.windSpeedTextView);
         pressureTextView = rootView.findViewById(R.id.pressureTextView);
+
         fetchWeatherData();
 
         return rootView;
@@ -45,19 +45,19 @@ public class TodayWeatherFragment extends Fragment {
 
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
-                (Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
-
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(
+                Request.Method.GET, URL, null,
+                new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject response) {
                         try {
                             JSONObject main = response.getJSONObject("main");
-                            Double temperature = main.getDouble("temp");
-                            Double humidity = main.getDouble("humidity");
-                            Double pressure = main.getDouble("pressure");
+                            double temperature = main.getDouble("temp");
+                            double humidity = main.getDouble("humidity");
+                            double pressure = main.getDouble("pressure");
 
                             JSONObject wind = response.getJSONObject("wind");
-                            Double windSpeed = wind.getDouble("speed");
+                            double windSpeed = wind.getDouble("speed");
 
                             temperatureTextView.setText(String.valueOf(temperature));
                             humidityTextView.setText(String.valueOf(humidity));
@@ -66,15 +66,15 @@ public class TodayWeatherFragment extends Fragment {
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
-
                     }
-                }, new Response.ErrorListener() {
-
+                },
+                new Response.ErrorListener() {
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // Handle error here
                     }
-                });
+                }
+        );
 
         requestQueue.add(jsonObjectRequest);
     }

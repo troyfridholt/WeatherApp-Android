@@ -23,20 +23,21 @@ import java.util.ArrayList;
 
 public class HourlyForecastFragment extends Fragment {
 
-    private ArrayList<HourlyForecast> mHourlyForecastList;
-    private HourlyForecastAdapter mHourlyForecastAdapter;
+    private HourlyForecastAdapter hourlyForecastAdapter;
+    private ArrayList<HourlyForecast> hourlyForecastList;
     private final String API_KEY = "67acd4e8f0cfb70fa1d19299bb3f796c";
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+                             Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_hourly_forecast, container, false);
 
         ListView listView = rootView.findViewById(R.id.hourlyForecastListView);
 
-        mHourlyForecastList = new ArrayList<>();
-        mHourlyForecastAdapter = new HourlyForecastAdapter(getActivity(), mHourlyForecastList);
+        hourlyForecastList = new ArrayList<>();
+        hourlyForecastAdapter = new HourlyForecastAdapter(getActivity(), hourlyForecastList);
 
-        listView.setAdapter(mHourlyForecastAdapter);
+        listView.setAdapter(hourlyForecastAdapter);
 
         fetchHourlyForecastData();
 
@@ -44,49 +45,49 @@ public class HourlyForecastFragment extends Fragment {
     }
 
     private void fetchHourlyForecastData() {
-        String URL = "https://api.openweathermap.org/data/2.5/forecast?q=London,uk&appid=" + API_KEY;
+        String URL = getString(R.string.weather_api_url, "London,uk", API_KEY);
 
         RequestQueue requestQueue = Volley.newRequestQueue(getActivity());
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
+        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest
+                (Request.Method.GET, URL, null, new Response.Listener<JSONObject>() {
 
-            @Override
-            public void onResponse(JSONObject response) {
-                try {
-                    JSONArray list = response.getJSONArray("list");
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        try {
+                            JSONArray list = response.getJSONArray("list");
 
-                    for (int i = 0; i < list.length(); i++) {
-                        JSONObject jsonObject = list.getJSONObject(i);
+                            for (int i = 0; i < list.length() && i < 6; i++) {
+                                JSONObject jsonObject = list.getJSONObject(i);
 
-                        JSONObject main = jsonObject.getJSONObject("main");
-                        Double temperature = main.getDouble("temp");
-                        Double humidity = main.getDouble("humidity");
+                                JSONObject main = jsonObject.getJSONObject("main");
+                                Double temperature = main.getDouble("temp");
+                                //Convert temperature from kelvin to celsius
+                                temperature = temperature - 273.15;
+                                Double humidity = main.getDouble("humidity");
 
-                        JSONArray weatherArray = jsonObject.getJSONArray("weather");
-                        JSONObject weather = weatherArray.getJSONObject(0);
-                        String weatherDescription = weather.getString("description");
+                                JSONArray weatherArray = jsonObject.getJSONArray("weather");
+                                JSONObject weather = weatherArray.getJSONObject(0);
+                                String weatherDescription = weather.getString("description");
 
-                        JSONObject wind = jsonObject.getJSONObject("wind");
-                        Double windSpeed = wind.getDouble("speed");
+                                JSONObject wind = jsonObject.getJSONObject("wind");
+                                Double windSpeed = wind.getDouble("speed");
+                                String dateTime = jsonObject.getString("dt_txt");
+                                hourlyForecastList.add(new HourlyForecast(temperature, humidity, weatherDescription, windSpeed, dateTime));
+                            }
 
-                        String date = jsonObject.getString("dt_txt");
-                        HourlyForecast hourlyForecast = new HourlyForecast(temperature, humidity, weatherDescription, windSpeed, date);
-                        mHourlyForecastList.add(hourlyForecast);
+                            hourlyForecastAdapter.notifyDataSetChanged();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
                     }
+                }, new Response.ErrorListener() {
 
-                    mHourlyForecastAdapter.notifyDataSetChanged();
-
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-            }
-        }, new Response.ErrorListener() {
-
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-            }
-        });
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // Handle error
+                    }
+                });
 
         requestQueue.add(jsonObjectRequest);
     }

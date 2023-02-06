@@ -1,38 +1,40 @@
 package com.example.weatherapp;
 
+
+
 public class HourlyForecast {
 
-    private Double mTemperature;
-    private Double mHumidity;
-    private String mWeatherDescription;
-    private Double mWindSpeed;
-    private String mDate;
+    private Double temperature;
+    private Double humidity;
+    private String weatherDescription;
+    private Double windSpeed;
+    private String dateTime;
 
-    public HourlyForecast(Double temperature, Double humidity, String weatherDescription, Double windSpeed, String date) {
-        mTemperature = temperature;
-        mHumidity = humidity;
-        mWeatherDescription = weatherDescription;
-        mWindSpeed = windSpeed;
-        mDate = date;
+    public HourlyForecast(Double temperature, Double humidity, String weatherDescription, Double windSpeed, String dateTime) {
+        this.temperature = temperature;
+        this.humidity = humidity;
+        this.weatherDescription = weatherDescription;
+        this.windSpeed = windSpeed;
+        this.dateTime = dateTime;
     }
 
     public Double getTemperature() {
-        return mTemperature;
+        return temperature;
     }
 
     public Double getHumidity() {
-        return mHumidity;
+        return humidity;
     }
 
     public String getWeatherDescription() {
-        return mWeatherDescription;
+        return weatherDescription;
     }
 
     public Double getWindSpeed() {
-        return mWindSpeed;
+        return windSpeed;
     }
 
-    public String getDate() {
-        return mDate;
+    public String getDateTime() {
+        return dateTime;
     }
 }
