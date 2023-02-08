@@ -41,6 +41,7 @@ public class HourlyForecastFragment extends Fragment {
 
         fetchHourlyForecastData();
 
+
         return rootView;
     }
 
@@ -91,4 +92,5 @@ public class HourlyForecastFragment extends Fragment {
 
         requestQueue.add(jsonObjectRequest);
     }
+
 }
